@@ -11,10 +11,11 @@ namespace WebCheesyPizzaApplication.Controllers
 {
     public class SignController : Controller
     {
-        private readonly UserManager<AccountUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        private readonly SignInManager<AccountUser> _signInManager;
-        public SignController(UserManager<AccountUser> userManager, SignInManager<AccountUser> signInManager = null)
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public SignController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager = null)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +42,6 @@ namespace WebCheesyPizzaApplication.Controllers
 
             return View(model);
         }
-
+        
     }
 }
