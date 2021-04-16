@@ -13,7 +13,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="~/products/index">
                 <img src="~/images/Logo.svg" style="width:60px; display:inline-block;" alt="Alternate Text" />
                 Cheesy Pizza
             </a>
@@ -26,14 +26,24 @@
                 </li>*@
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <a class="nav-link text-dark" asp-controller="Sign" asp-action="Login">Login</a>
-                <a class="nav-link text-dark" asp-controller="Sign" asp-action="SignUp">Sign Up</a>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="nav-link text-dark" asp-controller="Sign" asp-action="Logout">Logout</a>
+                }
+                else
+                {
+                    @*Sign IN*@
+                    <a class="nav-link text-dark" asp-controller="Sign" asp-action="Login">Login</a>
+                    @*SIGN UP*@
+                    <a class="nav-link text-dark" asp-controller="Sign" asp-action="SignUp">Sign Up</a>
+                }
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
     </nav>
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

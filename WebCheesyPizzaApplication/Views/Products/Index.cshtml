@@ -1,0 +1,23 @@
+﻿@model List<WebCheesyPizzaApplication.ViewModels.ProductViewModel>
+@{
+    ViewData["Title"] = "Products";
+}
+@foreach (var item in Model)
+{
+
+
+    <div class="card col-md-3 text-center m-3" style="display:inline-flex; width:40%">
+        <div class="col-md card; ">
+            <div class="card-header"> @item.Name
+                @*<a href="~/products/detailsproduct?id=@item.Id" class="btn btn-link">@item.Name</a>*@
+            </div>
+            <div class="card-body d-flex justify-content-center">
+                <img height="300" width="320" src="@item.ImagePath" alt="FOTO" />
+            </div>
+            <div class="card-footer">
+                <p>Цена:@item.Price TJS</p>
+            </div>
+        </div>
+    </div>
+
+}
