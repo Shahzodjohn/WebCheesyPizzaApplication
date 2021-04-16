@@ -42,6 +42,36 @@ namespace WebCheesyPizzaApplication.Controllers
 
             return View(model);
         }
-        
+        [HttpGet]
+        public IActionResult SignUp() => View();
+        [HttpPost]
+        public async Task<IActionResult> SignUp(SignUpViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = new AccountUser
+            {
+                UserName = model.Login,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                FirstName = model.Name
+
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if(result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "User");
+                return RedirectToAction("Login");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+            return View(model);
+        }
+       
     }
 }
