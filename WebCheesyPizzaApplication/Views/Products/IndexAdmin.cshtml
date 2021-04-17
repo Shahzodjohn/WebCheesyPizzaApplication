@@ -1,8 +1,22 @@
-﻿@model List<WebCheesyPizzaApplication.ViewModels.ProductViewModel>
+﻿@model WebCheesyPizzaApplication.ViewModels.IndexCategoryViewModel
 @{
     ViewData["Title"] = "Products";
 }
-@foreach (var item in Model)
+
+<div class="mt-3 bg-light float-left text-center" style="width:200px; height:700px; ">
+
+    <ul class="list-group list-group-flush">
+        @foreach (var item in Model.Categories)
+        {
+
+            <li class="list-group-item list-group-item-warning">
+                @item.Name
+            </li>
+
+        }
+    </ul>
+</div>
+@foreach (var item in Model.Products)
 {
 
 

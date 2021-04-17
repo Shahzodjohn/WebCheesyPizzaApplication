@@ -32,17 +32,19 @@ namespace WebCheesyPizzaApplication.Controllers
             {
                 return Redirect("/Products/IndexAdmin");
             }
+            var categories = await _context.Categories.Select(x => new CategoryViewModel { Name = x.Name }).ToListAsync();
             var products = await _context.Products.Include(s => 
             s.Category).Select(s => new ProductViewModel { Id = s.Id, Name = s.Name, CategoryName = s.Category.Name, ImagePath = s.Image, Price = s.Price }).ToListAsync();
 
-            return View(products);
+            return View(new IndexCategoryViewModel { Categories = categories, Products = products});
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> IndexAdmin()
         {
+            var categories = await _context.Categories.Select(x => new CategoryViewModel { Name = x.Name }).ToListAsync();
             var products = await _context.Products.Include(s => s.Category).Select(s => new ProductViewModel { Id = s.Id, Name = s.Name, CategoryName = s.Category.Name, ImagePath = s.Image, Price = s.Price }).ToListAsync();
-            return View(products);
+            return View(new IndexCategoryViewModel { Categories = categories, Products = products });
         }
 
 
