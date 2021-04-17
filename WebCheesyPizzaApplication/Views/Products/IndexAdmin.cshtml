@@ -2,19 +2,6 @@
 @{
     ViewData["Title"] = "Products";
 }
-
-<div class="mt-3 bg-light float-left" style="width:200px; height:700px; ">
-    <ul>
-        
-        @foreach (var item in Model)
-        {
-            <li>
-                @item.CategoryName
-            </li>
-        }
-    </ul>
-</div>
-
 @foreach (var item in Model)
 {
 
@@ -29,6 +16,8 @@
             </div>
             <div class="card-footer">
                 <p>Цена:@item.Price TJS</p>
+                <a href="/Products/DeleteProduct?id=@item.Id" class="btn btn-primary">Изменить</a>
+                <a href="/Products/DeleteProduct?id=@item.Id" class="btn btn-danger">Удалить</a>
             </div>
         </div>
     </div>

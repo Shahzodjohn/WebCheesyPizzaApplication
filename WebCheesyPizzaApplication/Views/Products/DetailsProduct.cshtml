@@ -1,0 +1,27 @@
+﻿@model WebCheesyPizzaApplication.ViewModels.ProductViewModel
+
+<div class="row">
+    <div class="col-md-4">
+
+        <div asp-validation-summary="All"></div>
+        <form asp-action="DetailsProduct" asp-controller="Products">
+            <div class="card">
+                <div class="card-header">
+                    @Model.Name
+                </div>
+                <div class="card-body">
+                    <div type="text" asp-for="Id"></div>
+                    <div>
+                        <img width="320" src="@Model.ImagePath" alt="FOTO" />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div>Цена: @Model.Price TJS</div><hr />
+                    <div> <strong>Категория:</strong>@Model.CategoryName</div><hr />
+                    <div placeholder="Описание"> <strong>Описание:</strong> @Model.Description</div><hr />
+                    <div placeholder="Рецепт"><strong>Рецепт:</strong>  @Model.Reciept</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

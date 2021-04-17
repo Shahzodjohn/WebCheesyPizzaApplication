@@ -1,0 +1,27 @@
+﻿@model WebCheesyPizzaApplication.ViewModels.CreateProductViewModel
+@{
+    ViewData["Title"] = "Create Model";
+}
+<div asp-validation-summary="All"></div>
+<div class="container d-flex justify-content-center">
+    <form action="CreateProduct" method="post" enctype="multipart/form-data" class="form-group w-50">
+        <label for="Name" class="mt-2">Имя</label>
+        <input type="text" asp-for="Name" class="form-control" placeholder="Имя" />
+        <label for="Price" class="mt-2">Цена</label>
+        <input type="number" asp-for="Price" class="form-control" placeholder="Price" />
+        <label for="Image" class="mt-2">Фото</label>
+        <input type="file" width="25" asp-for="Image" placeholder="Image" class="d-block form-control-file" />
+        <label for="Description" class="mt-2">Описание</label>
+        <input type="text" placeholder="описание" asp-for="Description" class="form-control" />
+        <label for="Reciept" class="mt-2">Рецепт</label>
+        <input type="text" placeholder="рецепт" asp-for="Reciept" class="form-control" />
+        <label for="CategoryId" class="mt-2">Категория</label>
+        <select asp-for="CategoryId" class="form-control" placeholder="Категория">
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Key">@category.Value</option>
+            }
+        </select>
+        <input type="submit" value="Создать" class="btn btn-danger mt-2" />
+    </form>
+</div>

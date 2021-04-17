@@ -1,0 +1,9 @@
+﻿@model WebCheesyPizzaApplication.ViewModels.CategoryViewModel
+@{
+    ViewData["Title"] = "Create Product";
+}
+<div asp-validation-summary="All"></div>
+<form asp-controller="Category" asp-action="CreateCategory">
+    <input type="text" asp-for="Name" />
+    <input type="submit" value="Создать"/>
+</form>
