@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCheesyPizzaApplication.Context;
 
 namespace WebCheesyPizzaApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210418171224_BasketModels")]
+    partial class BasketModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,51 +217,6 @@ namespace WebCheesyPizzaApplication.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Basket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Baskets");
-                });
-
-            modelBuilder.Entity("WebCheesyPizzaApplication.Models.BasketProducts", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BasketId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BasketId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("BasketProducts");
-                });
-
             modelBuilder.Entity("WebCheesyPizzaApplication.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -375,29 +332,6 @@ namespace WebCheesyPizzaApplication.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebCheesyPizzaApplication.Models.BasketProducts", b =>
-                {
-                    b.HasOne("WebCheesyPizzaApplication.Models.Basket", "Basket")
-                        .WithMany("BasketProducts")
-                        .HasForeignKey("BasketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebCheesyPizzaApplication.Models.Category", null)
-                        .WithMany("BasketProducts")
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("WebCheesyPizzaApplication.Models.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Basket");
-
-                    b.Navigation("product");
-                });
-
             modelBuilder.Entity("WebCheesyPizzaApplication.Models.Product", b =>
                 {
                     b.HasOne("WebCheesyPizzaApplication.Models.Category", "Category")
@@ -409,15 +343,8 @@ namespace WebCheesyPizzaApplication.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Basket", b =>
-                {
-                    b.Navigation("BasketProducts");
-                });
-
             modelBuilder.Entity("WebCheesyPizzaApplication.Models.Category", b =>
                 {
-                    b.Navigation("BasketProducts");
-
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618

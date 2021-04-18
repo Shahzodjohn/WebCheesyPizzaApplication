@@ -4,7 +4,7 @@
     <div class="col-md-4">
 
         <div asp-validation-summary="All"></div>
-        <form asp-action="DetailsProduct" asp-controller="Products">
+        <form asp-action="DetailsProduct" asp-controller="Products" style="height:1000px">
             <div class="card">
                 <div class="card-header">
                     @Model.Name
@@ -20,6 +20,7 @@
                     <div> <strong>Категория:</strong>@Model.CategoryName</div><hr />
                     <div placeholder="Описание"> <strong>Описание:</strong> @Model.Description</div><hr />
                     <div placeholder="Рецепт"><strong>Рецепт:</strong>  @Model.Reciept</div>
+                    <input type="button" class="btn-block btn-primary" style="height:45px;margin-top:10px" value="Добавить в корзину"/>
                 </div>
             </div>
         </form>

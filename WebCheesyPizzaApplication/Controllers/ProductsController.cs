@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,13 @@ namespace WebCheesyPizzaApplication.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProductsController(IWebHostEnvironment environment, AppDbContext context)
+        public ProductsController(IWebHostEnvironment environment, AppDbContext context, UserManager<IdentityUser> userManager)
         {
             _environment = environment;
             _context = context;
+            _userManager = userManager;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -131,6 +134,15 @@ namespace WebCheesyPizzaApplication.Controllers
             new ProductViewModel {Id=x.Id, Name = x.Name, ImagePath = x.Image, CategoryName = x.Category.Name, Price = x.Price }).ToListAsync();
             return View(search);
         }
-        
+        public async Task<IActionResult> List()
+        {
+            var categories = await _context.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name }).ToListAsync();
+            return View(categories);
+        }
+        //public async Task<IActionResult> BasketProducts()
+        //{
+        //    var currentUser = await _userManager.GetUserAsync(User);
+        //    var currentUserCart = await _context.
+        //}
     }
 }
