@@ -11,9 +11,9 @@ namespace WebCheesyPizzaApplication.ViewModels
     {
         [Required]
         public string Name { get; set; }
-        [Required]
-        public virtual IFormFile Image { get; set; }
         [Required(ErrorMessage ="Выберите фото")]
+        public virtual IFormFile Image { get; set; }
+        [Required]
         public int CategoryId { get; set; }
         public double Price { get; set; }
         public string Description { get; set; }

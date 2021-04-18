@@ -1,0 +1,25 @@
+﻿@model List<WebCheesyPizzaApplication.ViewModels.ProductViewModel>
+<div asp-validation-summary="All"></div>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Категория</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+       @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <a href="~/products/detailsproduct?id=@item.Id" class="btn btn-link">@item.Name</a>
+            </td>
+            <td>@item.CategoryName</td>
+            <td>@item.Price TJS</td>
+        </tr>
+           
+        }
+    </tbody>
+</table>
+

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace WebCheesyPizzaApplication.Controllers
             {
                 return Redirect("/Products/IndexAdmin");
             }
-            var categories = await _context.Categories.Select(x => new CategoryViewModel { Name = x.Name }).ToListAsync();
+            var categories = await _context.Categories.Select(x => new CategoryViewModel {Id=x.Id, Name = x.Name }).ToListAsync();
             var products = await _context.Products.Include(s => 
             s.Category).Select(s => new ProductViewModel { Id = s.Id, Name = s.Name, CategoryName = s.Category.Name, ImagePath = s.Image, Price = s.Price }).ToListAsync();
 
@@ -42,7 +43,7 @@ namespace WebCheesyPizzaApplication.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> IndexAdmin()
         {
-            var categories = await _context.Categories.Select(x => new CategoryViewModel { Name = x.Name }).ToListAsync();
+            var categories = await _context.Categories.Select(x => new CategoryViewModel { Id=x.Id, Name = x.Name }).ToListAsync();
             var products = await _context.Products.Include(s => s.Category).Select(s => new ProductViewModel { Id = s.Id, Name = s.Name, CategoryName = s.Category.Name, ImagePath = s.Image, Price = s.Price }).ToListAsync();
             return View(new IndexCategoryViewModel { Categories = categories, Products = products });
         }
@@ -97,6 +98,17 @@ namespace WebCheesyPizzaApplication.Controllers
             return NotFound();
         }
 
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var products = from m in _context.Products
+                           select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.Name.Contains(searchString));
+            }
+            return View(await products.ToListAsync());
+        }
+
 
         private static async Task AddFile(IFormFile file, string directoryPath)
         {
@@ -113,5 +125,12 @@ namespace WebCheesyPizzaApplication.Controllers
             if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
             return directoryPath;
         }
+        public async Task<IActionResult> SearchByCategories(int CategoryId)
+        {
+            var search = await _context.Products.Include(x=>x.Category).Where(s => s.CategoryId == CategoryId).Select(x =>
+            new ProductViewModel {Id=x.Id, Name = x.Name, ImagePath = x.Image, CategoryName = x.Category.Name, Price = x.Price }).ToListAsync();
+            return View(search);
+        }
+        
     }
 }

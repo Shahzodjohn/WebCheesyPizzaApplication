@@ -1,0 +1,29 @@
+﻿@model List<WebCheesyPizzaApplication.Models.Product>
+
+@{
+    ViewData["title"] = "Поиск по блюдам";
+}
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="All"></div>
+            <form asp-action="Search" asp-controller="Products">
+                <div class="card-header w-75">
+                    @item.Name
+                </div>
+                <div class="card-body">
+                    <div type="text" asp-for="Id"></div>
+                    <div>
+                        <img width="320" src="@item.Image" alt="PHOTO" />
+                    </div>
+                </div>
+                <div class="card-footer w-75">
+                    <div>Цена: @item.Price</div>
+                    <div>Категория: @item.Category.Name</div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+}

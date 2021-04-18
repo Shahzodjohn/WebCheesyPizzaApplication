@@ -3,16 +3,15 @@
     ViewData["Title"] = "Products";
 }
 
-<div class="mt-3 bg-light float-left text-center" style="width:200px; height:700px; ">
+<div class="mt-3 bg-light float-left text-center" style="width:200px; height:5080px; ">
 
     <ul class="list-group list-group-flush">
         @foreach (var item in Model.Categories)
         {
 
-            <li class="list-group-item list-group-item-warning">
-                @item.Name
+            <li class="list-group-item list-group-item-warning btn btn-link">
+                <a href="~/products/searchbycategories?CategoryId=@item.Id">@item.Name</a>
             </li>
-
         }
     </ul>
 </div>
