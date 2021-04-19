@@ -6,24 +6,33 @@
 @foreach (var item in Model)
 {
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-2">
+
             <div asp-validation-summary="All"></div>
-            <form asp-action="Search" asp-controller="Products">
-                <div class="card-header w-75">
-                    @item.Name
-                </div>
-                <div class="card-body">
-                    <div type="text" asp-for="Id"></div>
-                    <div>
-                        <img width="320" src="@item.Image" alt="PHOTO" />
+            <form asp-action="DetailsProduct" asp-controller="Products">
+                <div class="card" >
+                    <div class="card-header">
+                        <div class="text-center">
+                            <a href="~/products/detailsproduct?id=@item.Id">@item.Name</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div type="text" asp-for="Id"></div>
+                        <div>
+                            <img width="320" src="@item.Image" alt="PHOTO" />
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div>Цена: @item.Price</div>
+                        <div>Категория: @item.Category.Name</div>
+                        <a href="~/products/AddToBasket?id=@item.Id" style="margin-top:10px" class=" btn sbtn-block btn-primary btn-outline-success btn-block">Добавить в корзину</a>
                     </div>
                 </div>
-                <div class="card-footer w-75">
-                    <div>Цена: @item.Price</div>
-                    <div>Категория: @item.Category.Name</div>
-                </div>
-
             </form>
         </div>
     </div>
 }
+
+
+
+

@@ -139,10 +139,55 @@ namespace WebCheesyPizzaApplication.Controllers
             var categories = await _context.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name }).ToListAsync();
             return View(categories);
         }
-        //public async Task<IActionResult> BasketProducts()
-        //{
-        //    var currentUser = await _userManager.GetUserAsync(User);
-        //    var currentUserCart = await _context.
-        //}
+        public IActionResult FreeBasket()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> BasketProducts()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var CurrentUserBasket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
+            if (CurrentUserBasket == null)
+                return RedirectToAction("FreeBasket");
+            var currentUserCartProductNames = await (from bp in _context.BasketProducts
+                                                     join p in _context.Products on bp.ProductId equals p.Id
+                                                     where bp.BasketId == CurrentUserBasket.Id
+                                                     select new BasketProductViewModel { Name = p.Name, Id = p.Id, Amount = bp.Amount, Price = p.Price }).ToListAsync();
+            return View(currentUserCartProductNames);
+        }
+        public async Task<IActionResult> AddToBasket(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
+            if (basket == null)
+            {
+                basket = new Basket
+                {
+                    UserId = currentUser.Id
+                };
+                await _context.Baskets.AddAsync(basket);
+
+                await _context.SaveChangesAsync();
+            }
+            var basketProduct = await _context.BasketProducts.FirstOrDefaultAsync(x => x.BasketId == basket.Id && x.ProductId == id);
+            if(basketProduct == null)
+            {
+                basketProduct = new BasketProducts
+                {
+                    ProductId = id,
+                    BasketId = basket.Id,
+                    Amount = 1,
+                };
+                await _context.BasketProducts.AddAsync(basketProduct);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                basketProduct.Amount++;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("BasketProducts");
+        }
     }
 }
