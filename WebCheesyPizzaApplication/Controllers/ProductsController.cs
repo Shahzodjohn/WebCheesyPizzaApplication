@@ -156,8 +156,13 @@ namespace WebCheesyPizzaApplication.Controllers
                                                      select new BasketProductViewModel { Name = p.Name, Id = p.Id, Amount = bp.Amount, Price = p.Price }).ToListAsync();
             return View(currentUserCartProductNames);
         }
+        
         public async Task<IActionResult> AddToBasket(int id)
         {
+            if (!User.IsInRole("User"))
+            {
+                return RedirectToAction("Login", "Sign");
+            }
             var currentUser = await _userManager.GetUserAsync(User);
             var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
             if (basket == null)
