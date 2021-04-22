@@ -194,5 +194,41 @@ namespace WebCheesyPizzaApplication.Controllers
             }
             return RedirectToAction("BasketProducts");
         }
+        public async Task<IActionResult> DeleteProductFromBasket(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
+            var basketProduct = await _context.BasketProducts.FirstOrDefaultAsync(x => x.BasketId == basket.Id && x.ProductId == id);
+            if (basketProduct.Amount == 1)
+            {
+                _context.BasketProducts.Remove(basketProduct);
+            }
+            else
+            {
+                basketProduct.Amount--;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("BasketProducts");
+        }
+
+
+
+
+
+
+
+
+        //public async Task<IActionResult> DeleteProductFromBasket(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        Product product = await _context.BasketProducts.FirstOrDefaultAsync(x => x.Id == id);
+        //        _context.Products.Remove(product);
+        //        await _context.SaveChangesAsync();
+        //        return Redirect("BasketProducts");
+        //    }
+        //    return NotFound();
+        //}
     }
 }

@@ -1,39 +1,55 @@
 ﻿@model List<WebCheesyPizzaApplication.ViewModels.BasketProductViewModel>
 <div asp-validation-summary="All"></div>
-<table class="table table-bordered table-hover">
+<table class="table table-active table-bordered">
     <thead>
         <tr>
             <th>Название</th>
             <th>Количество</th>
-            <th>Общая стоимость</th>
+            <th>Стоимость</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
         <tr>
-            <td>@item.Name</td>
-            <td>@item.Amount</td>
-            <td>@(item.Amount*item.Price) TJS</td>
+            <td style="font-size:23px">@item.Name</td>
+            <td style="font-size:23px">@item.Amount</td>
+            <td style="font-size:23px">@(item.Amount*item.Price) TJS</td>
+            <td>
+                <a href="~/Products/DeleteProductFromBasket?id=@item.Id" class="btn btn-outline-danger">Убрать продукт</a>
+            </td>
         </tr>
 
         }
     </tbody>
 </table>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Итого</th>
-            <td>@Model.Sum(x => x.Price) TJS</td>
-        </tr>
-    </thead>
-</table>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th style="font-size:25px">Количество продуктов</th>
+                <th style="font-size:25px">Итого</th>
+                <th style="font-size:25px">Сумма c учетом вашей скидки</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
 
-<div class="float-right:50px">
-    
-</div>
+                <td><strong style="font-size:30px">@Model.Sum(x => x.Amount) продуктов</strong></td>
+                <td><strong style="font-size:30px">@Model.Sum(x => x.Price * x.Amount) TJS</strong></td>
+                @if (@Model.Any(g => g.Amount > 1))
+                {
+                    <td><strong style="font-size:30px"> @Model.Sum(x => x.Amount * x.Price - (x.Price * x.Amount * 0.1)) TJS</strong></td>
+                }
+
+            </tr>
+        </tbody>
+    </table>
+            <input type="submit" class="btn btn-outline-success float-xl-right" value="Подтвердить" />
 
 
+
+            
+            
 
 
 

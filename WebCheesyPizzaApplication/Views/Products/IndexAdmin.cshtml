@@ -18,8 +18,11 @@
                 }
             </ul>
         </div>
-        <div class="d-flex justify-content-center">
-            <img src="~/images/Bann.jpg" class="img-fluid" />
+        <div class="d-flex justify-content-center mt-2">
+            <img src="~/images/PizzaCheck.jpg" style="width:350px" class="img-fluid" />
+        </div>
+        <div class="d-flex justify-content-center mt-2 img-fluid">
+            <img src="~/images/skid.jpg" style="width:350px" class="img-fluid" />
         </div>
 
     </div>
@@ -37,7 +40,7 @@
                         </div>
                         <div class="card-footer  text-center">
                             <p>Цена: @item.Price TJS</p>
-                    <a href="/Products/DeleteProduct?id=@item.Id" class="btn btn-primary">Изменить</a>
+                    <a href="/Products/EditProduct?id=@item.Id" class="btn btn-primary">Изменить</a>
                     <a href="/Products/DeleteProduct?id=@item.Id" class="btn btn-danger">Удалить</a>
                         </div>
                     </div>
