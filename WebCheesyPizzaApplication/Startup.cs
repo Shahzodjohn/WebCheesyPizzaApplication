@@ -42,8 +42,8 @@ namespace WebCheesyPizzaApplication
             services.AddAuthorization();
             services.ConfigureApplicationCookie(option =>
             {
-                option.LoginPath = "/Home/Login";
-                option.AccessDeniedPath = "/Home/Index";
+                option.LoginPath = "/Sign/Login";
+                option.AccessDeniedPath = "/Sign/Login";
                 option.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 option.SlidingExpiration = true;
             });

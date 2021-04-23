@@ -36,17 +36,17 @@ namespace WebCheesyPizzaApplication.Controllers
             {
                 return Redirect("/Products/IndexAdmin");
             }
-            var categories = await _context.Categories.Select(x => new CategoryViewModel {Id=x.Id, Name = x.Name }).ToListAsync();
-            var products = await _context.Products.Include(s => 
+            var categories = await _context.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name }).ToListAsync();
+            var products = await _context.Products.Include(s =>
             s.Category).Select(s => new ProductViewModel { Id = s.Id, Name = s.Name, CategoryName = s.Category.Name, ImagePath = s.Image, Price = s.Price }).ToListAsync();
 
-            return View(new IndexCategoryViewModel { Categories = categories, Products = products});
+            return View(new IndexCategoryViewModel { Categories = categories, Products = products });
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> IndexAdmin()
         {
-            var categories = await _context.Categories.Select(x => new CategoryViewModel { Id=x.Id, Name = x.Name }).ToListAsync();
+            var categories = await _context.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name }).ToListAsync();
             var products = await _context.Products.Include(s => s.Category).Select(s => new ProductViewModel { Id = s.Id, Name = s.Name, CategoryName = s.Category.Name, ImagePath = s.Image, Price = s.Price }).ToListAsync();
             return View(new IndexCategoryViewModel { Categories = categories, Products = products });
         }
@@ -62,7 +62,7 @@ namespace WebCheesyPizzaApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductViewModel model)
         {
-            if (!ModelState.IsValid)return View(model);
+            if (!ModelState.IsValid) return View(model);
             string directoryPath = CreateDirectory();
             await AddFile(model.Image, directoryPath);
             var product = new Product
@@ -85,7 +85,7 @@ namespace WebCheesyPizzaApplication.Controllers
             var productViewModel = await _context.Products.Select(x =>
             new ProductViewModel { Id = x.Id, CategoryName = x.Category.Name, Name = x.Name, ImagePath = x.Image, Price = x.Price, Description = x.Description, Reciept = x.Reciept }).FirstOrDefaultAsync(x => x.Id == id);
             return View(productViewModel);
-            
+
         }
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(int? id)
@@ -130,8 +130,8 @@ namespace WebCheesyPizzaApplication.Controllers
         }
         public async Task<IActionResult> SearchByCategories(int CategoryId)
         {
-            var search = await _context.Products.Include(x=>x.Category).Where(s => s.CategoryId == CategoryId).Select(x =>
-            new ProductViewModel {Id=x.Id, Name = x.Name, ImagePath = x.Image, CategoryName = x.Category.Name, Price = x.Price }).ToListAsync();
+            var search = await _context.Products.Include(x => x.Category).Where(s => s.CategoryId == CategoryId).Select(x =>
+              new ProductViewModel { Id = x.Id, Name = x.Name, ImagePath = x.Image, CategoryName = x.Category.Name, Price = x.Price }).ToListAsync();
             return View(search);
         }
         public async Task<IActionResult> List()
@@ -156,13 +156,10 @@ namespace WebCheesyPizzaApplication.Controllers
                                                      select new BasketProductViewModel { Name = p.Name, Id = p.Id, Amount = bp.Amount, Price = p.Price }).ToListAsync();
             return View(currentUserCartProductNames);
         }
-        
+        [Authorize(Roles = ("User"))]
         public async Task<IActionResult> AddToBasket(int id)
         {
-            if (!User.IsInRole("User"))
-            {
-                return RedirectToAction("Login", "Sign");
-            }
+
             var currentUser = await _userManager.GetUserAsync(User);
             var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
             if (basket == null)
@@ -176,7 +173,7 @@ namespace WebCheesyPizzaApplication.Controllers
                 await _context.SaveChangesAsync();
             }
             var basketProduct = await _context.BasketProducts.FirstOrDefaultAsync(x => x.BasketId == basket.Id && x.ProductId == id);
-            if(basketProduct == null)
+            if (basketProduct == null)
             {
                 basketProduct = new BasketProducts
                 {
@@ -211,6 +208,21 @@ namespace WebCheesyPizzaApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("BasketProducts");
         }
+        [Authorize]
+        public async Task<IActionResult> Orderings()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
+            var basketProducts = await _context.BasketProducts.Where(x => x.BasketId == basket.Id).ToListAsync();
+
+            var order = new Order
+            {
+                OrderDate = DateTime.Now,
+                OrderStateId = 2,
+                UserId = currentUser.Id
+            };
+
+        }
 
 
 
@@ -219,16 +231,5 @@ namespace WebCheesyPizzaApplication.Controllers
 
 
 
-        //public async Task<IActionResult> DeleteProductFromBasket(int? id)
-        //{
-        //    if (id != null)
-        //    {
-        //        Product product = await _context.BasketProducts.FirstOrDefaultAsync(x => x.Id == id);
-        //        _context.Products.Remove(product);
-        //        await _context.SaveChangesAsync();
-        //        return Redirect("BasketProducts");
-        //    }
-        //    return NotFound();
-        //}
     }
 }
