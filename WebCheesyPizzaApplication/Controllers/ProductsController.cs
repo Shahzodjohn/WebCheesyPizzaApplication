@@ -221,7 +221,34 @@ namespace WebCheesyPizzaApplication.Controllers
                 OrderStateId = 2,
                 UserId = currentUser.Id
             };
-
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
+            var orderProducts = basketProducts.Select(x => new OrderProduct { OrderId = order.Id, ProductId = x.ProductId, Amount = x.Amount }).ToList();
+            await _context.OrderProducts.AddRangeAsync(orderProducts);
+            _context.BasketProducts.RemoveRange(basketProducts);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Orders");
+        }
+       
+        [Authorize]
+        public async Task<IActionResult> OrderProducts(int orderId)
+        {
+            var orderProducts = await _context.OrderProducts.Where(x => x.OrderId == orderId).Include(x => x.Product).Select(x => new OrderProductViewModel { Name = x.Product.Name, Amount = x.Amount, Price = x.Product.Price }).ToListAsync();
+            return View(orderProducts);
+        }
+        [Authorize]
+        public async Task<IActionResult> Orders()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var orders = await _context.Orders.Where(x => x.UserId == currentUser.Id).Include(x => x.OrderProducts).ThenInclude(x => x.Product).Include(x => x.OrderState).ToListAsync();
+            var orderViewModel = orders.Select(x => new OrderViewModel
+            {
+                Id = x.Id,
+                OrderDate = x.OrderDate,
+                State = x.OrderState.Name,
+                Summ = x.OrderProducts.Sum(x => x.Amount*x.Product.Price)
+            }).ToList();
+            return View(orderViewModel);
         }
 
 

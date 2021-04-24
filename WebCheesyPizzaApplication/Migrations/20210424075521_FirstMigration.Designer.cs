@@ -10,8 +10,8 @@ using WebCheesyPizzaApplication.Context;
 namespace WebCheesyPizzaApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210418171224_BasketModels")]
-    partial class BasketModels
+    [Migration("20210424075521_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -217,6 +217,51 @@ namespace WebCheesyPizzaApplication.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Basket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Baskets");
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.BasketProducts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BasketId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BasketProducts");
+                });
+
             modelBuilder.Entity("WebCheesyPizzaApplication.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -236,6 +281,79 @@ namespace WebCheesyPizzaApplication.Migrations
                         {
                             Id = 1,
                             Name = "Бургеры"
+                        });
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderStateId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.OrderProduct", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProducts");
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.OrderState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Approved"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "New"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Rejected"
                         });
                 });
 
@@ -332,6 +450,59 @@ namespace WebCheesyPizzaApplication.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.BasketProducts", b =>
+                {
+                    b.HasOne("WebCheesyPizzaApplication.Models.Basket", "Basket")
+                        .WithMany("BasketProducts")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebCheesyPizzaApplication.Models.Category", null)
+                        .WithMany("BasketProducts")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("WebCheesyPizzaApplication.Models.Product", "product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("product");
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Order", b =>
+                {
+                    b.HasOne("WebCheesyPizzaApplication.Models.OrderState", "OrderState")
+                        .WithMany()
+                        .HasForeignKey("OrderStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderState");
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.OrderProduct", b =>
+                {
+                    b.HasOne("WebCheesyPizzaApplication.Models.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebCheesyPizzaApplication.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("WebCheesyPizzaApplication.Models.Product", b =>
                 {
                     b.HasOne("WebCheesyPizzaApplication.Models.Category", "Category")
@@ -343,9 +514,21 @@ namespace WebCheesyPizzaApplication.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Basket", b =>
+                {
+                    b.Navigation("BasketProducts");
+                });
+
             modelBuilder.Entity("WebCheesyPizzaApplication.Models.Category", b =>
                 {
+                    b.Navigation("BasketProducts");
+
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WebCheesyPizzaApplication.Models.Order", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

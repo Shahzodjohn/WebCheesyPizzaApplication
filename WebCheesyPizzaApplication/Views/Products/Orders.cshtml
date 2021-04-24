@@ -1,0 +1,24 @@
+﻿@model List<WebCheesyPizzaApplication.ViewModels.OrderViewModel>
+<table class="table table-active table-bordered">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Сумма</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="font-size:23px">@item.OrderDate</td>
+                <td style="font-size:23px">@item.State</td>
+                <td style="font-size:23px">@item.Summ</td>
+                <td style="font-size:23px">
+                    <a href="~/products/orderproducts?orderId=@item.Id" class="btn btn-outline-primary">Подробнее</a>
+                    @*<a href="~/products/DeleteFormOrderings?orderId=@item.Id" class="btn btn-outline-danger">Убрать из списка</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
