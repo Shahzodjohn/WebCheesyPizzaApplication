@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,8 +13,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="~/products/index">
-                <img src="~/images/Logo.svg" style="width:60px; display:inline-block;" alt="Alternate Text" />
+            <a class="navbar-brand" href="~/products/index" style="font-family:Britannic; font-size:50px; color:chocolate">
+                <img src="~/images/try.png" style="width:150px; display:inline-block;" alt="Alternate Text" />
                 Cheesy Pizza
             </a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -27,14 +27,15 @@
             </ul>
             <form class="form-inline my-2 my-lg-0">
 
-
+                <a class="nav-link text-dark" asp-controller="Sign" asp-action="Contacts" style="font-family:'Times New Roman', Times, serif; font-size:26px">Контакты</a>
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (User.IsInRole("Admin"))
                     {
-                        <a class="nav-link text-dark btn btn-light" asp-controller="Products" asp-action="List">Лист категориев</a>
+                        <a class="nav-link text-dark btn btn-light" asp-controller="Products" asp-action="OrderList" style="font-family:'Times New Roman', Times, serif; font-size:26px">Список заказов</a>
+                        <a class="nav-link text-dark btn btn-light" asp-controller="Products" asp-action="List" style="font-family:'Times New Roman', Times, serif; font-size:26px">Лист категорий</a>
                         <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-family:'Times New Roman', Times, serif; font-size:26px">
                                 Добавить
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -49,12 +50,17 @@
                         </div>
 
 
+
+
                     }
 
-                         <a class="nav-link text-dark" asp-controller="Products" asp-action="Orders">Мои заказы</a>
+
                     @if (User.IsInRole("User"))
                     {
-                        <a class="nav-link text-dark" asp-controller="products" asp-action="BasketProducts">
+
+                        <a class="nav-link text-dark" asp-controller="Products" asp-action="Orders" style="font-family:'Times New Roman', Times, serif; font-size:26px">Мои заказы</a>
+
+                        <a class="nav-link text-dark" asp-controller="products" asp-action="BasketProducts" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
                                 <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
@@ -66,7 +72,11 @@
                     <input name="searchString" class="form-control mr-sm-2" type="search" placeholder="Искать" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" asp-action="Search" asp-controller="Products" type="submit">Искать</button>
 
-
+                    <a class="nav-link text-dark btn btn-light" asp-controller="Sign" asp-action="DetailsUser">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z" />
+                        </svg>
+                    </a>
                     @*LOGOUT*@
                     <a class="nav-link text-dark" asp-controller="Sign" asp-action="Logout">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
@@ -75,13 +85,14 @@
                         </svg>
                     </a>
 
+
                 }
                 else
                 {
                     <input name="searchString" class="form-control mr-sm-2" type="search" placeholder="Искать" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" asp-action="Search" asp-controller="Products" type="submit">Искать</button>
                     @*Sign IN*@
-                    <a class="nav-link text-dark" asp-controller="Sign" asp-action="Login">Войти</a>
+                    <a class="nav-link text-dark" asp-controller="Sign" asp-action="Login" style="font-family:'Times New Roman', Times, serif; font-size:26px">Войти</a>
                     @*SIGN UP*@
                     @* <a class="nav-link text-dark" asp-controller="Sign" asp-action="SignUp">Зарегистрироваться</a>*@
                 }

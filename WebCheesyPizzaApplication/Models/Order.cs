@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace WebCheesyPizzaApplication.Models
         public DateTime OrderDate { get; set; }
         public int OrderStateId { get; set; }
         public virtual OrderState OrderState { get; set; }
+        public virtual IdentityUser User { get; set; }
         public virtual ICollection<OrderProduct> OrderProducts{get;set;}
     }
 }

@@ -10,15 +10,27 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td style="font-size:23px">@item.OrderDate</td>
-                <td style="font-size:23px">@item.State</td>
-                <td style="font-size:23px">@item.Summ</td>
-                <td style="font-size:23px">
-                    <a href="~/products/orderproducts?orderId=@item.Id" class="btn btn-outline-primary">Подробнее</a>
-                    @*<a href="~/products/DeleteFormOrderings?orderId=@item.Id" class="btn btn-outline-danger">Убрать из списка</a>*@
-                </td>
-            </tr>
+        <tr>
+            <td style="font-size:23px">@item.OrderDate</td>
+
+            @if (item.State == "Отменено")
+            {
+                <td style="font-size: 23px; color: red">@item.State</td>
+            }
+            @if (item.State == "В ожидании")
+            {
+                <td style=" font-size:23px; color:blue">@item.State</td>
+            }
+            @if (item.State == "Оплачено")
+            {
+                <td style=" font-size:23px; color:green ">@item.State</td>
+            }
+            <td style="font-size:23px">@item.Summ TJS</td>
+            <td style="font-size:23px">
+                <a href="~/products/orderproducts?orderId=@item.Id" class="btn btn-outline-primary">Подробнее</a>
+                @*<a href="~/products/DeleteFormOrderings?orderId=@item.Id" class="btn btn-outline-danger">Убрать из списка</a>*@
+            </td>
+        </tr>
         }
     </tbody>
 </table>

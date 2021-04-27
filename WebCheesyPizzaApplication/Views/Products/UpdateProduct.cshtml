@@ -1,0 +1,46 @@
+﻿@model WebCheesyPizzaApplication.ViewModels.UpdateViewModel
+@{
+    ViewData["title"] = "Edit";
+}
+<div class="row justify-content-center">
+    <div asp-validation-summary="All"></div>
+    <div class="col-md-6 p-3">
+        <form action="UpdateProduct" method="post">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Редактирование продуктов</h5>
+                    <label>Название</label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                    <label>Стоимость</label>
+                    <input type="text" asp-for="Price" class="form-control" />
+                    <input type="hidden" class="form-control" asp-for="Id" />
+                    <label>Описание</label>
+                    <input type="text" class="form-control" asp-for="Description" />
+                    <label>Рецепт</label>
+                    <input type="text" class="form-control" asp-for="Reciept" />
+                    <label>Категории</label>
+                    <select asp-for="CategoryId" class="form-control">
+                        @foreach (var item in Model.Categories)
+                        {
+                            if (item.Key == Model.CategoryId)
+                            {
+                                <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+
+                        }
+                    </select>
+                    <img width="320" src="@Model.ImagePath" alt="FOTO" />
+                    <input type="file" asp-for="Image"/>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" class="btn btn-outline-primary btn-block" value="Сохранить изменения" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+ 

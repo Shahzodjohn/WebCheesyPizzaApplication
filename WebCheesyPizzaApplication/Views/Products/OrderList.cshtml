@@ -1,0 +1,62 @@
+﻿@model WebCheesyPizzaApplication.ViewModels.OrderListViewModel
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Дата заказа</th>
+            <th>Имя Пользователя</th>
+            <th>Статус</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.OrderDate</td>
+                <td>@item.UserName</td>
+                <td>
+                    <div class="dropdown">
+                        
+                        @if(item.State == "В ожидании")
+                         {
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @item.State
+                        </button>
+                         }
+                        @if(item.State == "Оплачено")
+                         {
+                        <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @item.State
+                        </button>
+                         } 
+                        @if(item.State == "Отменено")
+                         {
+                        <button type="button" class="btn btn-sm btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @item.State
+                        </button>
+                         }
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @foreach (var itemm in Model.OrderStates)
+                            {
+                                //var routeData = new Dictionary<string, string>
+                                //{
+                                //      {"newStateId", itemm.Key.ToString()},
+                                //      {"orderId", item.Id.ToString()},
+                                //      {"userId", item.UserId.ToString()}
+                                //};
+                                <a href="~/Products/ChangeState?newStateId=@itemm.Key&orderId=@item.Id&userId=@item.UserId" class="dropdown-item text-@(itemm.Value == "В ожидании" ? "primary" : itemm.Value == "Оплачено" ? "success" : "danger")" >@itemm.Value</a>
+                            }
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

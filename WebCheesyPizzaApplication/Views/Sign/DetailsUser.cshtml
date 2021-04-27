@@ -1,0 +1,26 @@
+﻿@model WebCheesyPizzaApplication.ViewModels.UserDetailViewModel
+
+<div class="row justify-content-center">
+    <div asp-validation-summary="All"></div>
+    <div class="col-md-3 p-3">
+        <form action="SignUp" method="post">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Инфо пользователя</h5>
+                    <label>Ваш Id</label>
+                    <p class="form-control">@Model.Id</p>
+                    <label>Ваш Login</label>
+                    <p class="form-control">@Model.Login</p>
+                    <label>Контактные номера</label>
+                    <p class="form-control">+(992) @Model.PhoneNumber</p>
+                    <label>Email</label>
+                    <p class="form-control">@Model.Email</p>
+
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-outline-primary btn-block" href="~/Products/Index">Вернуться на главное меню</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

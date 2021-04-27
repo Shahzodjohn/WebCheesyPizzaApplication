@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebCheesyPizzaApplication.Context;
 using WebCheesyPizzaApplication.Models;
 using WebCheesyPizzaApplication.ViewModels;
 
@@ -14,6 +16,7 @@ namespace WebCheesyPizzaApplication.Controllers
         private readonly UserManager<IdentityUser> _userManager;
 
         private readonly SignInManager<IdentityUser> _signInManager;
+
 
         public SignController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager = null)
         {
@@ -51,13 +54,13 @@ namespace WebCheesyPizzaApplication.Controllers
             {
                 return View(model);
             }
-            var user = new AccountUser
+            var user = new IdentityUser
             {
                 UserName = model.Login,
-                LastName = model.LastName,
+                
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                FirstName = model.Name
+               
 
             };
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -76,6 +79,22 @@ namespace WebCheesyPizzaApplication.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
+        }
+        public async Task<IActionResult> DetailsUser(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var UserViewModel = new UserDetailViewModel
+            {
+                Id = currentUser.Id,
+                Email = currentUser.Email,
+                Login = currentUser.UserName,
+                PhoneNumber = currentUser.PhoneNumber
+            };
+            return View(UserViewModel);
+        }
+        public IActionResult Contacts()
+        {
+            return View();
         }
     }
 }

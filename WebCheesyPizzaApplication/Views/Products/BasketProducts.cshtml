@@ -10,17 +10,34 @@
     </thead>
     <tbody>
         @foreach (var item in Model)
-        {
+        { 
         <tr>
+            
             <td style="font-size:23px">@item.Name</td>
-            <td style="font-size:23px">@item.Amount</td>
+            <td style="font-size:23px">
+                <a href="~/products/DeleteProductFromBasket?id=@item.Id">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
+                    </svg>
+                </a>
+
+                - @item.Amount -
+
+                <a href="~/products/AddToBasket?id=@item.Id">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                    </svg>
+                </a>
+            </td>
             <td style="font-size:23px">@(item.Amount*item.Price) TJS</td>
             <td>
-                <a href="~/Products/DeleteProductFromBasket?id=@item.Id" class="btn btn-outline-danger">Убрать продукт</a>
+                <a href="~/Products/DeleteTheWholeProduct?id=@item.Id" class="btn btn-outline-danger">Убрать продукт</a>
             </td>
         </tr>
 
-        }
+    }
     </tbody>
 </table>
     <table class="table table-dark">
@@ -28,7 +45,6 @@
             <tr>
                 <th style="font-size:25px">Количество продуктов</th>
                 <th style="font-size:25px">Итого</th>
-                <th style="font-size:25px">Сумма c учетом вашей скидки</th>
             </tr>
         </thead>
         <tbody>
@@ -36,10 +52,6 @@
 
                 <td><strong style="font-size:30px">@Model.Sum(x => x.Amount) продуктов</strong></td>
                 <td><strong style="font-size:30px">@Model.Sum(x => x.Price * x.Amount) TJS</strong></td>
-                @if (@Model.Any(g => g.Amount > 1))
-                {
-                    <td><strong style="font-size:30px"> @Model.Sum(x => x.Amount * x.Price - (x.Price * x.Amount * 0.1)) TJS</strong></td>
-                }
 
             </tr>
         </tbody>

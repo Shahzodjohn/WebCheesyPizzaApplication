@@ -25,7 +25,7 @@
         <tr>
             <th style="font-size:25px">Количество продуктов</th>
             <th style="font-size:25px">Итого</th>
-            <th style="font-size:25px">Сумма c учетом вашей скидки</th>
+            
         </tr>
     </thead>
     <tbody>
@@ -33,11 +33,6 @@
 
             <td><strong style="font-size:30px">@Model.Sum(x => x.Amount) продуктов</strong></td>
             <td><strong style="font-size:30px">@Model.Sum(x => x.Price * x.Amount) TJS</strong></td>
-            @if (@Model.Any(g => g.Amount > 1))
-            {
-                <td><strong style="font-size:30px"> @Model.Sum(x => x.Amount * x.Price - (x.Price * x.Amount * 0.1)) TJS</strong></td>
-            }
-
         </tr>
     </tbody>
 </table>

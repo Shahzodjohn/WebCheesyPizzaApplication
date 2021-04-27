@@ -35,9 +35,9 @@ namespace WebCheesyPizzaApplication.Context
             builder.Entity<OrderProduct>().HasKey(x => new { x.OrderId, x.ProductId });
             builder.Entity<Category>().HasData(new Category { Id = 1, Name = "Бургеры" });
             builder.Entity<OrderState>().HasData(
-                new OrderState { Id = 1, Name = "Approved"},
-                new OrderState { Id = 2, Name = "New"},
-                new OrderState { Id = 3, Name = "Rejected"}
+                new OrderState { Id = 1, Name = "Оплачено"},
+                new OrderState { Id = 2, Name = "В ожидании"},
+                new OrderState { Id = 3, Name = "Отменено"}
                 );
             builder.Entity<Product>().HasData(new Product { Id = 1, CategoryId = 1, Image = "/images/burger.jpg", Name = "Гамбургер", Price = 12 });
         }
