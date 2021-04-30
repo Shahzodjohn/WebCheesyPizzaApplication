@@ -7,12 +7,5 @@ using System.Threading.Tasks;
 
 namespace WebCheesyPizzaApplication.Models
 {
-    public class AccountUser : IdentityUser
-    {
-        [Required]
-        public string FirstName { get; set; }
-        [Required]
-        public string LastName { get; set; }
-        
-    }
+    public class AccountUser : IdentityUser  {}
 }

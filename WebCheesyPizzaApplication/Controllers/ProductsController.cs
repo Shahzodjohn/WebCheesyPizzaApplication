@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 using WebCheesyPizzaApplication.Context;
 using WebCheesyPizzaApplication.Models;
 using WebCheesyPizzaApplication.ViewModels;
-using static System.Net.WebRequestMethods;
+
 
 namespace WebCheesyPizzaApplication.Controllers
 {
@@ -91,7 +90,7 @@ namespace WebCheesyPizzaApplication.Controllers
                 Price = product.Price,
                 Description = product.Description,
                 Reciept = product.Reciept
-                
+
             };
             return View(updateProduct);
         }
@@ -228,7 +227,7 @@ namespace WebCheesyPizzaApplication.Controllers
                 basketProduct.Amount++;
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("BasketProducts");
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> DeleteProductFromBasket(int id)
         {
@@ -246,13 +245,22 @@ namespace WebCheesyPizzaApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("BasketProducts");
         }
+        public async Task<IActionResult> PlusProductToBasket(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
+            var basketProduct = await _context.BasketProducts.FirstOrDefaultAsync(x => x.BasketId == basket.Id && x.ProductId == id);
+            basketProduct.Amount++;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("BasketProducts");
+        }
         public async Task<IActionResult> DeleteTheWholeProduct(int id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var basket = await _context.Baskets.FirstOrDefaultAsync(x => x.UserId == currentUser.Id);
             var basketProduct = await _context.BasketProducts.FirstOrDefaultAsync(x => x.BasketId == basket.Id && x.ProductId == id);
-                _context.BasketProducts.Remove(basketProduct);
-            
+            _context.BasketProducts.Remove(basketProduct);
+
             await _context.SaveChangesAsync();
             return RedirectToAction("BasketProducts");
         }
@@ -277,10 +285,10 @@ namespace WebCheesyPizzaApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Orders");
         }
-       
+
         [Authorize]
         public async Task<IActionResult> OrderProducts(int orderId)
-        {
+        {//подробнее
             var orderProducts = await _context.OrderProducts.Where(x => x.OrderId == orderId).Include(x => x.Product).Select(x => new OrderProductViewModel { Name = x.Product.Name, Amount = x.Amount, Price = x.Product.Price }).ToListAsync();
             return View(orderProducts);
         }
@@ -294,25 +302,23 @@ namespace WebCheesyPizzaApplication.Controllers
                 Id = x.Id,
                 OrderDate = x.OrderDate,
                 State = x.OrderState.Name,
-                Summ = x.OrderProducts.Sum(x => x.Amount*x.Product.Price)
+                Summ = x.OrderProducts.Sum(x => x.Amount * x.Product.Price)
             }).ToList();
             return View(orderViewModel);
         }
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> OrderList(int id)
+        public async Task<IActionResult> OrderList()
         {
             var orderListViewModel = new OrderListViewModel
             {
-                Orders = await _context.Orders.Include(x => x.OrderState).Include(x=>x.User).Select(x =>
-                new OrderViewModel { Id = x.Id, OrderDate = x.OrderDate, State = x.OrderState.Name, UserId = x.UserId, UserName = x.User.UserName }
+                Orders = await _context.Orders.Include(x => x.OrderState).Include(x => x.User).Select(x =>
+                  new OrderViewModel { Id = x.Id, OrderDate = x.OrderDate, State = x.OrderState.Name, UserId = x.UserId, UserName = x.User.UserName, Summ = x.OrderProducts.Sum(x => x.Amount * x.Product.Price) }
                 ).ToListAsync(),
                 OrderStates = await _context.OrderStates.ToDictionaryAsync(x => x.Id, x => x.Name)
             };
 
             return View(orderListViewModel);
         }
-
-
         [Authorize]
         public async Task<IActionResult> ChangeState(int newStateId, int orderId, string userId)
         {
@@ -321,11 +327,6 @@ namespace WebCheesyPizzaApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("OrderList");
         }
-
-
-
-
-
 
 
     }

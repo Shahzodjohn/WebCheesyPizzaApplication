@@ -1,7 +1,45 @@
 ﻿@model WebCheesyPizzaApplication.ViewModels.UpdateCategoryViewModel
-<div asp-validation-summary="All"></div>
-<form asp-action="UpdateCategory" asp-controller="Category">
-    <input asp-for="Name" type="text" />
-    <input type="hidden" asp-for="Id"/>
-    <input type="submit" class="form-control btn btn-success btn-block" value="Обновить" />
-</form>
+<div class="row">
+    <div class="text-danger" asp-validation-summary="All">
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4" style="margin-top:100px">
+        <form>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Обновить категорию</h5>
+                    <div class="form-group">
+                        <label for="Y">Название</label>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Ваш логин">
+                        <input type="submit" class="form-control btn btn-success mt-3" value="Обновить" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="row">
+
+<div class="card">
+    <form asp-action="UpdateCategory" asp-controller="Category">
+        <input asp-for="Name" class="form-control" type="text" />
+        <input type="hidden" class="form-control" asp-for="Id" />
+        <input type="submit" class="form-control btn btn-success" value="Обновить" />
+    </form>
+</div>
+</div>*@

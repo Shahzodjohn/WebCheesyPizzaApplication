@@ -12,17 +12,14 @@
         @foreach (var item in Model)
         {
             <tr>
-                
                 <td>
                     <a href="~/products/searchbycategories?CategoryId=@item.Id" class="btn btn-link">@item.Name</a>
                 </td>
                 <td>
-                    <a href="~/Category/DeleteCategory?id=@item.Id" class="btn btn-danger btn-group-vertical">Удалить категорию</a>
+                    <a href="~/Category/DeleteCategory?id=@item.Id" onclick="return confirm('Вы уверены, что хотите удалить данную категорию?')" class="btn btn-danger btn-group-vertical">Удалить категорию</a>
                     <a href="~/Category/UpdateCategory?id=@item.Id" class="btn btn-primary btn-group-vertical">Обновить категорию</a>
                 </td>
-                
             </tr>
-
         }
     </tbody>
 </table>

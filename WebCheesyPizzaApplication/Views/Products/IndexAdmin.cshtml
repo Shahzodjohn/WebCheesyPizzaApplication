@@ -41,7 +41,7 @@
                         <div class="card-footer  text-center">
                             <p>Цена: @item.Price TJS</p>
                     <a href="/Products/UpdateProduct?id=@item.Id" class="btn btn-primary">Изменить</a>
-                    <a href="/Products/DeleteProduct?id=@item.Id" class="btn btn-danger">Удалить</a>
+                    <a href="/Products/DeleteProduct?id=@item.Id" onclick="return confirm('Вы уверены что хотите удалить данный продукт?')" class="btn btn-danger">Удалить</a>
                         </div>
                     </div>
                 </div>
